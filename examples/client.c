@@ -1,7 +1,5 @@
 #include "messend.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_net.h>
 
 int main(int argc, char **argv) {
 
@@ -20,8 +18,9 @@ int main(int argc, char **argv) {
     struct Message* recvMessage = peer_receive_message(peer);
 
     for (int i = 0; i < recvMessage->size; i++) {
-        printf("%c", ((Uint8*)(recvMessage->data))[i]);
+        printf("%c", ((uint8_t*)(recvMessage->data))[i]);
     }
+    printf("\n");
 
     message_free(&message);
     message_free(recvMessage);

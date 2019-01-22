@@ -30,28 +30,22 @@ struct Peer* messend_accept(int port) {
         error(SDLNet_GetError());
     }
 
-    struct Peer* peer = malloc(sizeof(struct Peer));
+    struct Peer* peer = 0;
 
-    int done = 0;
-    while (!done) {
+    TCPsocket client = SDLNet_TCP_Accept(socket);
 
-        TCPsocket client = SDLNet_TCP_Accept(socket);
-
-        if (!client) {
-            //error(SDLNet_GetError());
-            SDL_Delay(100);
-        }
-        else {
-            peer->socket = client;
-            done = 1;
-        }
+    if (client) {
+        peer = malloc(sizeof(struct Peer));
+        peer->socket = client;
     }
 
     return peer;
 }
 
-struct Peer messend_initiate(char* addr, int port) {
+struct Peer* messend_initiate(char* addr, int port) {
     IPaddress ip;
+
+    struct Peer* peer = 0;
 
     if (SDLNet_ResolveHost(&ip, addr, port)) {
         error("could not resolve host");
@@ -62,9 +56,9 @@ struct Peer messend_initiate(char* addr, int port) {
         error("could not open socket");
     }
 
-    struct Peer peer;
+    peer = malloc(sizeof(struct Peer));
+    peer->socket = socket;
 
-    peer.socket = socket;
     return peer;
 }
 

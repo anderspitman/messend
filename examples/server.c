@@ -9,7 +9,11 @@ int main(int argc, char **argv) {
 
     messend_startup();
 
-    struct Peer* peer = messend_accept(9001);
+    struct Peer* peer = 0;
+    
+    while(!peer) {
+        peer = messend_accept(9001);
+    }
 
     struct Message message;
     message.data = "Hi from server";

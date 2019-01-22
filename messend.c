@@ -54,12 +54,12 @@ struct Peer messend_initiate(char* addr, int port) {
     IPaddress ip;
 
     if (SDLNet_ResolveHost(&ip, addr, port)) {
-        error(SDLNet_GetError());
+        error("could not resolve host");
     }
 
     TCPsocket socket = SDLNet_TCP_Open(&ip);
     if (!socket) {
-        error(SDLNet_GetError());
+        error("could not open socket");
     }
 
     struct Peer peer;

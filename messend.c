@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
-#include "messdl_net.h"
+#include "messend.h"
 
 void error(const char* message) {
     fprintf(stderr, "ERROR: %s\n", message);

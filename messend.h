@@ -1,5 +1,5 @@
-#ifndef __MESSDL_NET__
-#define __MESSDL_NET__
+#ifndef __MESSEND_H__
+#define __MESSEND_H__
 
 #include <stdint.h>
 #include <SDL2/SDL_net.h>
@@ -31,4 +31,4 @@ void peer_free(struct Peer* peer);
 
 void message_free(struct Message* message);
 
-#endif //__MESSDL_NET__
+#endif //__MESSEND_H__

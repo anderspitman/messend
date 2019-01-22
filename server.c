@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "messdl_net.h"
 #include <stdint.h>
+#include "messend.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>

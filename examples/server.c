@@ -8,8 +8,7 @@
 int main(int argc, char **argv) {
     SDLNet_Init();
 
-    struct Acceptor acceptor = acceptor_create();
-    struct Peer peer = acceptor_accept(&acceptor, 9001);
+    struct Peer peer = messend_accept(9001);
 
     struct Message message;
     message.data = "Hi from server";

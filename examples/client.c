@@ -6,8 +6,7 @@
 int main(int argc, char **argv) {
     SDLNet_Init();
 
-    struct Initiator initiator = initiator_create();
-    struct Peer peer = initiator_initiate(&initiator, "127.0.0.1", 9001);
+    struct Peer peer = messend_initiate("127.0.0.1", 9001);
 
     struct Message message;
     message.data = "Hi from client";

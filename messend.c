@@ -9,20 +9,8 @@ void error(const char* message) {
     exit(1);
 }
 
-static int acceptor_count = 0;
 
-struct Acceptor acceptor_create() {
-    acceptor_count++;
-
-    if (acceptor_count == 1) {
-    }
-
-    struct Acceptor acceptor;
-    return acceptor;
-}
-
-
-struct Peer acceptor_accept(struct Acceptor* acceptor, int port) {
+struct Peer messend_accept(int port) {
     IPaddress ip;
 
     if (SDLNet_ResolveHost(&ip, NULL, port)) {
@@ -54,12 +42,7 @@ struct Peer acceptor_accept(struct Acceptor* acceptor, int port) {
     return peer;
 }
 
-struct Initiator initiator_create() {
-    struct Initiator initiator;
-    return initiator;
-}
-
-struct Peer initiator_initiate(struct Initiator* initiator, char* addr, int port) {
+struct Peer messend_initiate(char* addr, int port) {
     IPaddress ip;
 
     if (SDLNet_ResolveHost(&ip, addr, port)) {

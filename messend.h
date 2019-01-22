@@ -23,7 +23,7 @@ struct Peer* messend_initiate(char* addr, int port);
 
 void peer_send_message(struct Peer* peer, struct Message message);
 struct Message* peer_receive_message(struct Peer* peer);
-void peer_free(struct Peer** peer);
+void peer_free(struct Peer* peer);
 
 void message_free(struct Message* message);
 

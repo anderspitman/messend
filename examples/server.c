@@ -29,7 +29,8 @@ int main(int argc, char **argv) {
     message_free(&message);
     message_free(recvMessage);
 
-    peer_free(&peer);
+    peer_free(peer);
+    peer = 0;
 
     messend_shutdown();
 

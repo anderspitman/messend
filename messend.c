@@ -95,10 +95,9 @@ struct Message* peer_receive_message(struct Peer* peer) {
     return message;
 }
 
-void peer_free(struct Peer** peer) {
-    SDLNet_TCP_Close((*peer)->socket);
-    free((*peer));
-    (*peer) = 0;
+void peer_free(struct Peer* peer) {
+    SDLNet_TCP_Close(peer->socket);
+    free(peer);
 }
 
 void message_free(struct Message* message) {

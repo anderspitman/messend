@@ -7,6 +7,9 @@
 struct Acceptor {
 };
 
+struct Initiator {
+};
+
 struct Message {
     void* data;
     uint64_t size;
@@ -17,10 +20,15 @@ struct Peer {
 };
 
 struct Acceptor acceptor_create();
+struct Peer acceptor_accept(struct Acceptor* acceptor, int port);
+
+struct Initiator initiator_create();
+struct Peer initiator_initiate(struct Initiator* initiator, char* addr, int port);
+
 void peer_send_message(struct Peer* peer, struct Message message);
 struct Message peer_receive_message(struct Peer* peer);
 void peer_free(struct Peer* peer);
+
 void message_free(struct Message* message);
-struct Peer acceptor_accept(struct Acceptor* acceptor, int port);
 
 #endif //__MESSDL_NET__

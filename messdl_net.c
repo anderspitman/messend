@@ -22,6 +22,62 @@ struct Acceptor acceptor_create() {
 }
 
 
+struct Peer acceptor_accept(struct Acceptor* acceptor, int port) {
+    IPaddress ip;
+
+    if (SDLNet_ResolveHost(&ip, NULL, port)) {
+        error(SDLNet_GetError());
+    }
+
+    TCPsocket socket = SDLNet_TCP_Open(&ip);
+    if (!socket) {
+        error(SDLNet_GetError());
+    }
+
+    struct Peer peer;
+
+    int done = 0;
+    while (!done) {
+
+        TCPsocket client = SDLNet_TCP_Accept(socket);
+
+        if (!client) {
+            //error(SDLNet_GetError());
+            SDL_Delay(100);
+        }
+        else {
+            peer.socket = client;
+            done = 1;
+        }
+    }
+
+    return peer;
+}
+
+struct Initiator initiator_create() {
+    struct Initiator initiator;
+    return initiator;
+}
+
+struct Peer initiator_initiate(struct Initiator* initiator, char* addr, int port) {
+    IPaddress ip;
+
+    if (SDLNet_ResolveHost(&ip, addr, port)) {
+        error(SDLNet_GetError());
+    }
+
+    TCPsocket socket = SDLNet_TCP_Open(&ip);
+    if (!socket) {
+        error(SDLNet_GetError());
+    }
+
+    struct Peer peer;
+
+    peer.socket = socket;
+    return peer;
+}
+
+
 void peer_send_message(struct Peer* peer, struct Message message) {
     Uint8 size_buf[1];
     size_buf[0] = message.size;
@@ -63,39 +119,6 @@ void message_free(struct Message* message) {
         free(message->data);
         message->data = 0;
     }
-}
-
-
-struct Peer acceptor_accept(struct Acceptor* acceptor, int port) {
-    IPaddress ip;
-
-    if (SDLNet_ResolveHost(&ip, NULL, port)) {
-        error(SDLNet_GetError());
-    }
-
-    TCPsocket socket = SDLNet_TCP_Open(&ip);
-    if (!socket) {
-        error(SDLNet_GetError());
-    }
-
-    struct Peer peer;
-
-    int done = 0;
-    while (!done) {
-
-        TCPsocket client = SDLNet_TCP_Accept(socket);
-
-        if (!client) {
-            //error(SDLNet_GetError());
-            SDL_Delay(100);
-        }
-        else {
-            peer.socket = client;
-            done = 1;
-        }
-    }
-
-    return peer;
 }
 
 

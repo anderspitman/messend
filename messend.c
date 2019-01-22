@@ -10,6 +10,14 @@ void error(const char* message) {
 }
 
 
+void messend_startup() {
+    SDLNet_Init();
+}
+
+void messend_shutdown() {
+    SDLNet_Quit();
+}
+
 struct Peer messend_accept(int port) {
     IPaddress ip;
 
@@ -103,5 +111,3 @@ void message_free(struct Message* message) {
         message->data = 0;
     }
 }
-
-

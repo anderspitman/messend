@@ -6,7 +6,8 @@
 #include <SDL2/SDL_net.h>
 
 int main(int argc, char **argv) {
-    SDLNet_Init();
+
+    messend_startup();
 
     struct Peer peer = messend_accept(9001);
 
@@ -25,7 +26,7 @@ int main(int argc, char **argv) {
 
     peer_free(&peer);
 
-    SDLNet_Quit();
+    messend_shutdown();
 
     return 0;
 }

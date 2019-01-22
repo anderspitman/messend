@@ -4,7 +4,8 @@
 #include <SDL2/SDL_net.h>
 
 int main(int argc, char **argv) {
-    SDLNet_Init();
+
+    messend_startup();
 
     struct Peer peer = messend_initiate("127.0.0.1", 9001);
 
@@ -18,6 +19,7 @@ int main(int argc, char **argv) {
         printf("%c", ((Uint8*)(message.data))[i]);
     }
 
-    SDLNet_Quit();
+    messend_shutdown();
+
     return 0;
 }

@@ -15,6 +15,9 @@ struct Peer {
 };
 
 
+void messend_startup();
+void messend_shutdown();
+
 struct Peer messend_accept(int port);
 struct Peer messend_initiate(char* addr, int port);
 

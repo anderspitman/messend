@@ -71,7 +71,7 @@ void peer_send_message(struct Peer* peer, struct Message message) {
     SDLNet_TCP_Send(peer->socket, message.data, message.size);
 }
 
-struct Message peer_receive_message(struct Peer* peer) {
+struct Message* peer_receive_message(struct Peer* peer) {
     Uint8 size_buf[1];
 
 
@@ -88,9 +88,9 @@ struct Message peer_receive_message(struct Peer* peer) {
         error(SDLNet_GetError());
     }
 
-    struct Message message;
-    message.data = data_buf;
-    message.size = size;
+    struct Message* message = malloc(sizeof(struct Message));
+    message->data = data_buf;
+    message->size = size;
 
     return message;
 }

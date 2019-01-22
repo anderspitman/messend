@@ -20,13 +20,14 @@ int main(int argc, char **argv) {
     message.size = 14;
     peer_send_message(peer, message);
 
-    message = peer_receive_message(peer);
+    struct Message* recvMessage = peer_receive_message(peer);
 
-    for (int i = 0; i < message.size; i++) {
-        printf("%c", ((Uint8*)(message.data))[i]);
+    for (int i = 0; i < recvMessage->size; i++) {
+        printf("%c", ((Uint8*)(recvMessage->data))[i]);
     }
 
     message_free(&message);
+    message_free(recvMessage);
 
     peer_free(&peer);
 

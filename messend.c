@@ -18,7 +18,7 @@ void messend_shutdown() {
     SDLNet_Quit();
 }
 
-struct Peer messend_accept(int port) {
+struct Peer* messend_accept(int port) {
     IPaddress ip;
 
     if (SDLNet_ResolveHost(&ip, NULL, port)) {
@@ -30,7 +30,7 @@ struct Peer messend_accept(int port) {
         error(SDLNet_GetError());
     }
 
-    struct Peer peer;
+    struct Peer* peer = malloc(sizeof(struct Peer));
 
     int done = 0;
     while (!done) {
@@ -42,7 +42,7 @@ struct Peer messend_accept(int port) {
             SDL_Delay(100);
         }
         else {
-            peer.socket = client;
+            peer->socket = client;
             done = 1;
         }
     }
@@ -101,8 +101,10 @@ struct Message peer_receive_message(struct Peer* peer) {
     return message;
 }
 
-void peer_free(struct Peer* peer) {
-    SDLNet_TCP_Close(peer->socket);
+void peer_free(struct Peer** peer) {
+    SDLNet_TCP_Close((*peer)->socket);
+    free((*peer));
+    (*peer) = 0;
 }
 
 void message_free(struct Message* message) {

@@ -5,7 +5,7 @@ int main(int argc, char **argv) {
 
     messend_startup();
 
-    struct Peer* peer = messend_initiate("127.0.0.1", 9001);
+    Peer peer = messend_initiate("127.0.0.1", 9001);
     if (!peer) {
         return 1;
     }

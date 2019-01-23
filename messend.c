@@ -7,6 +7,10 @@ struct _Acceptor {
     TCPsocket socket;
 };
 
+struct _Peer {
+    TCPsocket socket;
+};
+
 void error(const char* message) {
     fprintf(stderr, "ERROR: %s\n", message);
     exit(1);
@@ -42,14 +46,14 @@ Acceptor acceptor_create(uint16_t port) {
     return acceptor;
 }
 
-struct Peer* acceptor_accept(Acceptor acceptor) {
+Peer acceptor_accept(Acceptor acceptor) {
 
-    struct Peer* peer = NULL;
+    Peer peer = NULL;
 
     TCPsocket client = SDLNet_TCP_Accept(acceptor->socket);
 
     if (client) {
-        peer = malloc(sizeof(struct Peer));
+        peer = malloc(sizeof(*peer));
         peer->socket = client;
     }
 
@@ -61,10 +65,10 @@ void acceptor_free(Acceptor acceptor) {
     free(acceptor);
 }
 
-struct Peer* messend_initiate(char* addr, int port) {
+Peer messend_initiate(char* addr, int port) {
     IPaddress ip;
 
-    struct Peer* peer = 0;
+    Peer peer = 0;
 
     if (SDLNet_ResolveHost(&ip, addr, port)) {
         error("could not resolve host");
@@ -75,14 +79,14 @@ struct Peer* messend_initiate(char* addr, int port) {
         error("could not open socket");
     }
 
-    peer = malloc(sizeof(struct Peer));
+    peer = malloc(sizeof(*peer));
     peer->socket = socket;
 
     return peer;
 }
 
 
-void peer_send_message(struct Peer* peer, struct Message message) {
+void peer_send_message(Peer peer, struct Message message) {
     Uint8 size_buf[1];
     size_buf[0] = message.size;
 
@@ -90,7 +94,7 @@ void peer_send_message(struct Peer* peer, struct Message message) {
     SDLNet_TCP_Send(peer->socket, message.data, message.size);
 }
 
-struct Message* peer_receive_message(struct Peer* peer) {
+struct Message* peer_receive_message(Peer peer) {
     Uint8 size_buf[1];
 
 
@@ -114,7 +118,7 @@ struct Message* peer_receive_message(struct Peer* peer) {
     return message;
 }
 
-void peer_free(struct Peer* peer) {
+void peer_free(Peer peer) {
     SDLNet_TCP_Close(peer->socket);
     free(peer);
 }

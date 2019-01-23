@@ -6,29 +6,25 @@
 
 
 typedef struct _Acceptor* Acceptor;
+typedef struct _Peer* Peer;
 
 struct Message {
     void* data;
     uint64_t size;
 };
 
-struct Peer {
-    TCPsocket socket;
-};
-
-
 void messend_startup();
 void messend_shutdown();
 
 Acceptor acceptor_create(uint16_t port);
-struct Peer* acceptor_accept(Acceptor acceptor);
+Peer acceptor_accept(Acceptor acceptor);
 void acceptor_free(Acceptor acceptor);
 
-struct Peer* messend_initiate(char* addr, int port);
+Peer messend_initiate(char* addr, int port);
 
-void peer_send_message(struct Peer* peer, struct Message message);
-struct Message* peer_receive_message(struct Peer* peer);
-void peer_free(struct Peer* peer);
+void peer_send_message(Peer peer, struct Message message);
+struct Message* peer_receive_message(Peer peer);
+void peer_free(Peer peer);
 
 void message_free(struct Message* message);
 

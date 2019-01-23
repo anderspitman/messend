@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
 
     Acceptor acceptor = acceptor_create(9001);
 
-    struct Peer* peer = 0;
+    Peer peer = 0;
     
     while(!peer) {
         printf("loopy\n");

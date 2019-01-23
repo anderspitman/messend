@@ -9,28 +9,28 @@ extern "C"
 {
 #endif
 
-typedef struct _Acceptor* Acceptor;
-typedef struct _Peer* Peer;
+typedef struct _Acceptor* MessendAcceptor;
+typedef struct _Peer* MessendPeer;
 
 typedef struct {
     uint8_t* data;
     uint64_t size;
-} Message;
+} MessendMessage;
 
 void messend_startup();
 void messend_shutdown();
 
-Acceptor acceptor_create(uint16_t port);
-Peer acceptor_accept(Acceptor acceptor);
-void acceptor_free(Acceptor acceptor);
+MessendAcceptor messend_acceptor_create(uint16_t port);
+MessendPeer messend_acceptor_accept(MessendAcceptor acceptor);
+void messend_acceptor_free(MessendAcceptor acceptor);
 
-Peer messend_initiate(char* addr, int port);
+MessendPeer messend_initiate(char* addr, int port);
 
-void peer_send_message(Peer peer, Message message);
-Message* peer_receive_message(Peer peer);
-void peer_free(Peer peer);
+void messend_peer_send_message(MessendPeer peer, MessendMessage message);
+MessendMessage* messend_peer_receive_message(MessendPeer peer);
+void messend_peer_free(MessendPeer peer);
 
-void message_free(Message* message);
+void messend_message_free(MessendMessage* message);
 
 #ifdef __cplusplus
 }

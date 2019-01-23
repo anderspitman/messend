@@ -10,34 +10,34 @@ int main(int argc, char **argv) {
 
     messend_startup();
 
-    Acceptor acceptor = acceptor_create(9001);
+    MessendAcceptor acceptor = messend_acceptor_create(9001);
 
-    Peer peer = 0;
+    MessendPeer peer = 0;
     
     while(!peer) {
         printf("loopy\n");
-        peer = acceptor_accept(acceptor);
+        peer = messend_acceptor_accept(acceptor);
         SDL_Delay(100);
     }
 
-    Message message;
+    MessendMessage message;
     message.data = (uint8_t*)"Hi from server";
     message.size = 14;
-    peer_send_message(peer, message);
+    messend_peer_send_message(peer, message);
 
-    Message* recvMessage = peer_receive_message(peer);
+    MessendMessage* recvMessage = messend_peer_receive_message(peer);
 
     for (int i = 0; i < recvMessage->size; i++) {
         printf("%c", ((uint8_t*)(recvMessage->data))[i]);
     }
     printf("\n");
 
-    message_free(recvMessage);
+    messend_message_free(recvMessage);
 
-    peer_free(peer);
+    messend_peer_free(peer);
     peer = 0;
 
-    acceptor_free(acceptor);
+    messend_acceptor_free(acceptor);
     acceptor = NULL;
 
     messend_shutdown();

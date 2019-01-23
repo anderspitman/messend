@@ -25,11 +25,11 @@ void messend_shutdown() {
     SDLNet_Quit();
 }
 
-Acceptor acceptor_create(uint16_t port) {
+MessendAcceptor messend_acceptor_create(uint16_t port) {
 
     IPaddress ip;
 
-    Acceptor acceptor;
+    MessendAcceptor acceptor;
     acceptor = malloc(sizeof(*acceptor));
 
     if (SDLNet_ResolveHost(&ip, NULL, port)) {
@@ -46,9 +46,9 @@ Acceptor acceptor_create(uint16_t port) {
     return acceptor;
 }
 
-Peer acceptor_accept(Acceptor acceptor) {
+MessendPeer messend_acceptor_accept(MessendAcceptor acceptor) {
 
-    Peer peer = NULL;
+    MessendPeer peer = NULL;
 
     TCPsocket client = SDLNet_TCP_Accept(acceptor->socket);
 
@@ -60,15 +60,15 @@ Peer acceptor_accept(Acceptor acceptor) {
     return peer;
 }
 
-void acceptor_free(Acceptor acceptor) {
+void messend_acceptor_free(MessendAcceptor acceptor) {
     SDLNet_TCP_Close(acceptor->socket);
     free(acceptor);
 }
 
-Peer messend_initiate(char* addr, int port) {
+MessendPeer messend_initiate(char* addr, int port) {
     IPaddress ip;
 
-    Peer peer = 0;
+    MessendPeer peer = 0;
 
     if (SDLNet_ResolveHost(&ip, addr, port)) {
         error("could not resolve host");
@@ -86,7 +86,7 @@ Peer messend_initiate(char* addr, int port) {
 }
 
 
-void peer_send_message(Peer peer, Message message) {
+void messend_peer_send_message(MessendPeer peer, MessendMessage message) {
     Uint8 size_buf[sizeof(Uint32)];
     //size_buf[0] = message.size;
     _SDLNet_Write32(message.size, size_buf);
@@ -95,7 +95,7 @@ void peer_send_message(Peer peer, Message message) {
     SDLNet_TCP_Send(peer->socket, message.data, message.size);
 }
 
-Message* peer_receive_message(Peer peer) {
+MessendMessage* messend_peer_receive_message(MessendPeer peer) {
 
     Uint8 size_buf[sizeof(Uint32)];
 
@@ -111,19 +111,19 @@ Message* peer_receive_message(Peer peer) {
         error("failed to receive packet");
     }
 
-    Message* message = malloc(sizeof(Message));
+    MessendMessage* message = malloc(sizeof(MessendMessage));
     message->data = data_buf;
     message->size = size;
 
     return message;
 }
 
-void peer_free(Peer peer) {
+void messend_peer_free(MessendPeer peer) {
     SDLNet_TCP_Close(peer->socket);
     free(peer);
 }
 
-void message_free(Message* message) {
+void messend_message_free(MessendMessage* message) {
     if (message->data) {
         free(message->data);
         message->data = 0;

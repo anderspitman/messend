@@ -7,12 +7,12 @@ int main(int argc, char **argv) {
 
     messend_startup();
 
-    Peer peer = messend_initiate("127.0.0.1", 9001);
+    MessendPeer peer = messend_initiate("127.0.0.1", 9001);
     if (!peer) {
         return 1;
     }
 
-    Message message;
+    MessendMessage message;
     //message.data = (uint8_t*)"Hi from client aaaaaaaaa";
     //message.size = 24;
 
@@ -26,19 +26,19 @@ int main(int argc, char **argv) {
     }
     message.size = SIZE;
     
-    peer_send_message(peer, message);
+    messend_peer_send_message(peer, message);
 
-    Message* recvMessage = peer_receive_message(peer);
+    MessendMessage* recvMessage = messend_peer_receive_message(peer);
 
     for (int i = 0; i < recvMessage->size; i++) {
         printf("%c", ((uint8_t*)(recvMessage->data))[i]);
     }
     printf("\n");
 
-    message_free(recvMessage);
+    messend_message_free(recvMessage);
     recvMessage = 0;
 
-    peer_free(peer);
+    messend_peer_free(peer);
     peer = 0;
 
     messend_shutdown();

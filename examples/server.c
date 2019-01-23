@@ -2,15 +2,23 @@
 #include <stdint.h>
 #include "messend.h"
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_net.h>
+
 
 int main(int argc, char **argv) {
 
     messend_startup();
 
+    Acceptor* acceptor = acceptor_create(9001);
+
     struct Peer* peer = 0;
     
     while(!peer) {
-        peer = messend_accept(9001);
+        printf("loopy\n");
+        //peer = messend_accept(9001);
+        peer = acceptor_accept(acceptor);
+        SDL_Delay(100);
     }
 
     struct Message message;
@@ -25,7 +33,6 @@ int main(int argc, char **argv) {
     }
     printf("\n");
 
-    message_free(&message);
     message_free(recvMessage);
 
     peer_free(peer);

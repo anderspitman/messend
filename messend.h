@@ -5,6 +5,10 @@
 #include <SDL2/SDL_net.h>
 
 
+typedef struct {
+    TCPsocket socket;
+} Acceptor;
+
 struct Message {
     void* data;
     uint64_t size;
@@ -17,6 +21,9 @@ struct Peer {
 
 void messend_startup();
 void messend_shutdown();
+
+Acceptor* acceptor_create(uint16_t port);
+struct Peer* acceptor_accept(Acceptor* acceptor);
 
 struct Peer* messend_accept(int port);
 struct Peer* messend_initiate(char* addr, int port);

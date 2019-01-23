@@ -22,7 +22,6 @@ int main(int argc, char **argv) {
     }
     printf("\n");
 
-    message_free(&message);
     message_free(recvMessage);
     recvMessage = 0;
 

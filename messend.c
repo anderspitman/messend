@@ -18,8 +18,11 @@ void messend_shutdown() {
     SDLNet_Quit();
 }
 
-struct Peer* messend_accept(int port) {
+Acceptor* acceptor_create(uint16_t port) {
+
     IPaddress ip;
+
+    Acceptor* acceptor = malloc(sizeof(Acceptor));
 
     if (SDLNet_ResolveHost(&ip, NULL, port)) {
         error(SDLNet_GetError());
@@ -28,6 +31,39 @@ struct Peer* messend_accept(int port) {
     TCPsocket socket = SDLNet_TCP_Open(&ip);
     if (!socket) {
         error(SDLNet_GetError());
+    }
+
+    acceptor->socket = socket;
+
+    return acceptor;
+}
+
+struct Peer* acceptor_accept(Acceptor* acceptor) {
+
+    struct Peer* peer = NULL;
+
+    TCPsocket client = SDLNet_TCP_Accept(acceptor->socket);
+
+    if (client) {
+        peer = malloc(sizeof(struct Peer));
+        peer->socket = client;
+    }
+
+    return peer;
+}
+
+struct Peer* messend_accept(int port) {
+    IPaddress ip;
+
+    if (SDLNet_ResolveHost(&ip, NULL, port)) {
+        //error(SDLNet_GetError());
+        error("dis one");
+    }
+
+    TCPsocket socket = SDLNet_TCP_Open(&ip);
+    if (!socket) {
+        //error(SDLNet_GetError());
+        error("no dis one");
     }
 
     struct Peer* peer = 0;

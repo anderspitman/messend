@@ -29,19 +29,26 @@ int main(int argc, char **argv) {
     }
     message.size = SIZE;
     
-    messend_peer_send_message(peer, message);
 
-    //SDL_Delay(1000);
+    while (1) {
+        messend_peer_send_message(peer, message);
 
-    MessendMessage* recvMessage = messend_peer_receive_message(peer);
+        //SDL_Delay(1000);
 
-    for (int i = 0; i < recvMessage->size; i++) {
-        printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+        MessendMessage* recvMessage = NULL;
+
+        recvMessage = messend_peer_receive_message_wait(peer);
+
+        for (int i = 0; i < recvMessage->size; i++) {
+            printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+        }
+        printf("\n");
+
+        messend_message_free(recvMessage);
+        recvMessage = 0;
+
+        SDL_Delay(2000);
     }
-    printf("\n");
-
-    messend_message_free(recvMessage);
-    recvMessage = 0;
 
     messend_peer_free(peer);
     peer = 0;

@@ -28,6 +28,7 @@ MessendPeer messend_initiate(char* addr, int port);
 
 void messend_peer_send_message(MessendPeer peer, MessendMessage message);
 MessendMessage* messend_peer_receive_message(MessendPeer peer);
+MessendMessage* messend_peer_receive_message_wait(MessendPeer peer);
 void messend_peer_free(MessendPeer peer);
 
 void messend_message_free(MessendMessage* message);

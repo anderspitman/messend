@@ -14,25 +14,37 @@ int main(int argc, char **argv) {
 
     MessendPeer peer = 0;
     
+    printf("Waiting for connection\n");
+
     while(!peer) {
-        printf("loopy\n");
         peer = messend_acceptor_accept(acceptor);
         SDL_Delay(100);
     }
 
-    MessendMessage message;
-    message.data = (uint8_t*)"Hi from server";
-    message.size = 14;
-    messend_peer_send_message(peer, message);
+    printf("Connection established\n");
 
-    MessendMessage* recvMessage = messend_peer_receive_message(peer);
+    while (1) {
 
-    for (int i = 0; i < recvMessage->size; i++) {
-        printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+        MessendMessage* recvMessage = NULL;
+        recvMessage = messend_peer_receive_message_wait(peer);
+
+        printf("Message received:\n");
+
+        for (int i = 0; i < recvMessage->size; i++) {
+            printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+        }
+        printf("\n");
+
+        MessendMessage response;
+        response.data = (uint8_t*)malloc(recvMessage->size);
+        response.size = recvMessage->size;
+        for (int i = 0; i < response.size; i++) {
+            response.data[i] = recvMessage->data[i];
+        }
+
+        messend_peer_send_message(peer, response);
+        messend_message_free(recvMessage);
     }
-    printf("\n");
-
-    messend_message_free(recvMessage);
 
     messend_peer_free(peer);
     peer = 0;

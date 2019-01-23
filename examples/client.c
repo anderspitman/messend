@@ -2,6 +2,9 @@
 #include <stdint.h>
 #include "messend.h"
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_net.h>
+
 
 int main(int argc, char **argv) {
 
@@ -27,6 +30,8 @@ int main(int argc, char **argv) {
     //message.size = SIZE;
     //
     //messend_peer_send_message(peer, message);
+
+    SDL_Delay(1000);
 
     MessendMessage* recvMessage = messend_peer_receive_message(peer);
 

@@ -30,7 +30,7 @@ MessendAcceptor messend_acceptor_create(uint16_t port) {
     IPaddress ip;
 
     MessendAcceptor acceptor;
-    acceptor = malloc(sizeof(*acceptor));
+    acceptor = (MessendAcceptor)malloc(sizeof(*acceptor));
 
     if (SDLNet_ResolveHost(&ip, NULL, port)) {
         error(SDLNet_GetError());
@@ -53,7 +53,7 @@ MessendPeer messend_acceptor_accept(MessendAcceptor acceptor) {
     TCPsocket client = SDLNet_TCP_Accept(acceptor->socket);
 
     if (client) {
-        peer = malloc(sizeof(*peer));
+        peer = (MessendPeer)malloc(sizeof(*peer));
         peer->socket = client;
     }
 
@@ -79,7 +79,7 @@ MessendPeer messend_initiate(char* addr, int port) {
         error("could not open socket");
     }
 
-    peer = malloc(sizeof(*peer));
+    peer = (MessendPeer)malloc(sizeof(*peer));
     peer->socket = socket;
 
     return peer;
@@ -88,8 +88,8 @@ MessendPeer messend_initiate(char* addr, int port) {
 
 void messend_peer_send_message(MessendPeer peer, MessendMessage message) {
     Uint8 size_buf[sizeof(Uint32)];
-    //size_buf[0] = message.size;
     _SDLNet_Write32(message.size, size_buf);
+    //printf("send size: %lu\n", message.size);
 
     SDLNet_TCP_Send(peer->socket, size_buf, sizeof(Uint32));
     SDLNet_TCP_Send(peer->socket, message.data, message.size);
@@ -105,13 +105,13 @@ MessendMessage* messend_peer_receive_message(MessendPeer peer) {
 
     uint64_t size = _SDLNet_Read32(size_buf);
 
-    Uint8* data_buf = malloc(size);
+    Uint8* data_buf = (Uint8*)malloc(size);
 
     if (SDLNet_TCP_Recv(peer->socket, data_buf, size) <= 0) {
         error("failed to receive packet");
     }
 
-    MessendMessage* message = malloc(sizeof(MessendMessage));
+    MessendMessage* message = (MessendMessage*)malloc(sizeof(MessendMessage));
     message->data = data_buf;
     message->size = size;
 

@@ -16,7 +16,6 @@ int main(int argc, char **argv) {
     
     while(!peer) {
         printf("loopy\n");
-        //peer = messend_accept(9001);
         peer = acceptor_accept(acceptor);
         SDL_Delay(100);
     }

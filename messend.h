@@ -24,7 +24,6 @@ Acceptor acceptor_create(uint16_t port);
 struct Peer* acceptor_accept(Acceptor acceptor);
 void acceptor_free(Acceptor acceptor);
 
-struct Peer* messend_accept(int port);
 struct Peer* messend_initiate(char* addr, int port);
 
 void peer_send_message(struct Peer* peer, struct Message message);

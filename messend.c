@@ -61,32 +61,6 @@ void acceptor_free(Acceptor acceptor) {
     free(acceptor);
 }
 
-struct Peer* messend_accept(int port) {
-    IPaddress ip;
-
-    if (SDLNet_ResolveHost(&ip, NULL, port)) {
-        //error(SDLNet_GetError());
-        error("dis one");
-    }
-
-    TCPsocket socket = SDLNet_TCP_Open(&ip);
-    if (!socket) {
-        //error(SDLNet_GetError());
-        error("no dis one");
-    }
-
-    struct Peer* peer = 0;
-
-    TCPsocket client = SDLNet_TCP_Accept(socket);
-
-    if (client) {
-        peer = malloc(sizeof(struct Peer));
-        peer->socket = client;
-    }
-
-    return peer;
-}
-
 struct Peer* messend_initiate(char* addr, int port) {
     IPaddress ip;
 

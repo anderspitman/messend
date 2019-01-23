@@ -12,21 +12,21 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    MessendMessage message;
+    //MessendMessage message;
     //message.data = (uint8_t*)"Hi from client aaaaaaaaa";
     //message.size = 24;
 
-    const uint64_t SIZE = 128;
-    message.data = (uint8_t*)malloc(SIZE);
-    for (int i = 0; i < SIZE; i += 4) {
-        message.data[i] = 'A';
-        message.data[i+1] = 'C';
-        message.data[i+2] = 'G';
-        message.data[i+3] = 'T';
-    }
-    message.size = SIZE;
-    
-    messend_peer_send_message(peer, message);
+    //const uint64_t SIZE = 128;
+    //message.data = (uint8_t*)malloc(SIZE);
+    //for (int i = 0; i < SIZE; i += 4) {
+    //    message.data[i] = 'A';
+    //    message.data[i+1] = 'C';
+    //    message.data[i+2] = 'G';
+    //    message.data[i+3] = 'T';
+    //}
+    //message.size = SIZE;
+    //
+    //messend_peer_send_message(peer, message);
 
     MessendMessage* recvMessage = messend_peer_receive_message(peer);
 

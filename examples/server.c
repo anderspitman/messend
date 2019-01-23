@@ -25,14 +25,14 @@ int main(int argc, char **argv) {
     message.size = 14;
     messend_peer_send_message(peer, message);
 
-    MessendMessage* recvMessage = messend_peer_receive_message(peer);
+    //MessendMessage* recvMessage = messend_peer_receive_message(peer);
 
-    for (int i = 0; i < recvMessage->size; i++) {
-        printf("%c", ((uint8_t*)(recvMessage->data))[i]);
-    }
-    printf("\n");
+    //for (int i = 0; i < recvMessage->size; i++) {
+    //    printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+    //}
+    //printf("\n");
 
-    messend_message_free(recvMessage);
+    //messend_message_free(recvMessage);
 
     messend_peer_free(peer);
     peer = 0;

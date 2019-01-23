@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
 #include "messend.h"
+
+struct _Acceptor {
+    TCPsocket socket;
+};
 
 void error(const char* message) {
     fprintf(stderr, "ERROR: %s\n", message);
@@ -18,11 +21,12 @@ void messend_shutdown() {
     SDLNet_Quit();
 }
 
-Acceptor* acceptor_create(uint16_t port) {
+Acceptor acceptor_create(uint16_t port) {
 
     IPaddress ip;
 
-    Acceptor* acceptor = malloc(sizeof(Acceptor));
+    Acceptor acceptor;
+    acceptor = malloc(sizeof(*acceptor));
 
     if (SDLNet_ResolveHost(&ip, NULL, port)) {
         error(SDLNet_GetError());
@@ -38,7 +42,7 @@ Acceptor* acceptor_create(uint16_t port) {
     return acceptor;
 }
 
-struct Peer* acceptor_accept(Acceptor* acceptor) {
+struct Peer* acceptor_accept(Acceptor acceptor) {
 
     struct Peer* peer = NULL;
 
@@ -50,6 +54,11 @@ struct Peer* acceptor_accept(Acceptor* acceptor) {
     }
 
     return peer;
+}
+
+void acceptor_free(Acceptor acceptor) {
+    SDLNet_TCP_Close(acceptor->socket);
+    free(acceptor);
 }
 
 struct Peer* messend_accept(int port) {

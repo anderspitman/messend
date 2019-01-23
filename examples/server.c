@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
 
     messend_startup();
 
-    Acceptor* acceptor = acceptor_create(9001);
+    Acceptor acceptor = acceptor_create(9001);
 
     struct Peer* peer = 0;
     
@@ -37,6 +37,9 @@ int main(int argc, char **argv) {
 
     peer_free(peer);
     peer = 0;
+
+    acceptor_free(acceptor);
+    acceptor = NULL;
 
     messend_shutdown();
 

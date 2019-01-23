@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
 
     peer_free(peer);
     peer = 0;
+
     messend_shutdown();
 
     return 0;

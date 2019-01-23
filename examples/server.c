@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     }
 
     Message message;
-    message.data = "Hi from server";
+    message.data = (uint8_t*)"Hi from server";
     message.size = 14;
     peer_send_message(peer, message);
 

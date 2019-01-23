@@ -9,7 +9,7 @@ typedef struct _Acceptor* Acceptor;
 typedef struct _Peer* Peer;
 
 typedef struct {
-    void* data;
+    uint8_t* data;
     uint64_t size;
 } Message;
 

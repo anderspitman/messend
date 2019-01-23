@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdint.h>
 #include "messend.h"
 
 
@@ -11,8 +13,8 @@ int main(int argc, char **argv) {
     }
 
     Message message;
-    message.data = "Hi from client";
-    message.size = 14;
+    message.data = "Hi from client aaaaaaaaa";
+    message.size = 24;
     peer_send_message(peer, message);
 
     Message* recvMessage = peer_receive_message(peer);

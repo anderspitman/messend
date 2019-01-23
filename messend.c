@@ -87,28 +87,28 @@ Peer messend_initiate(char* addr, int port) {
 
 
 void peer_send_message(Peer peer, Message message) {
-    Uint8 size_buf[1];
-    size_buf[0] = message.size;
+    Uint8 size_buf[sizeof(Uint32)];
+    //size_buf[0] = message.size;
+    _SDLNet_Write32(message.size, size_buf);
 
-    SDLNet_TCP_Send(peer->socket, size_buf, 1);
+    SDLNet_TCP_Send(peer->socket, size_buf, sizeof(Uint32));
     SDLNet_TCP_Send(peer->socket, message.data, message.size);
 }
 
 Message* peer_receive_message(Peer peer) {
-    Uint8 size_buf[1];
 
+    Uint8 size_buf[sizeof(Uint32)];
 
-    if (SDLNet_TCP_Recv(peer->socket, size_buf, 1) <= 0) {
-        error(SDLNet_GetError());
+    if (SDLNet_TCP_Recv(peer->socket, size_buf, sizeof(Uint32)) <= 0) {
+        error("could not read size");
     }
 
-    uint64_t size = size_buf[0];
-    printf("size: %lu\n", size);
+    uint64_t size = _SDLNet_Read32(size_buf);
 
     Uint8* data_buf = malloc(size);
 
     if (SDLNet_TCP_Recv(peer->socket, data_buf, size) <= 0) {
-        error(SDLNet_GetError());
+        error("failed to receive packet");
     }
 
     Message* message = malloc(sizeof(Message));

@@ -86,7 +86,7 @@ Peer messend_initiate(char* addr, int port) {
 }
 
 
-void peer_send_message(Peer peer, struct Message message) {
+void peer_send_message(Peer peer, Message message) {
     Uint8 size_buf[1];
     size_buf[0] = message.size;
 
@@ -94,7 +94,7 @@ void peer_send_message(Peer peer, struct Message message) {
     SDLNet_TCP_Send(peer->socket, message.data, message.size);
 }
 
-struct Message* peer_receive_message(Peer peer) {
+Message* peer_receive_message(Peer peer) {
     Uint8 size_buf[1];
 
 
@@ -111,7 +111,7 @@ struct Message* peer_receive_message(Peer peer) {
         error(SDLNet_GetError());
     }
 
-    struct Message* message = malloc(sizeof(struct Message));
+    Message* message = malloc(sizeof(Message));
     message->data = data_buf;
     message->size = size;
 
@@ -123,7 +123,7 @@ void peer_free(Peer peer) {
     free(peer);
 }
 
-void message_free(struct Message* message) {
+void message_free(Message* message) {
     if (message->data) {
         free(message->data);
         message->data = 0;

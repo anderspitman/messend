@@ -10,12 +10,12 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    struct Message message;
+    Message message;
     message.data = "Hi from client";
     message.size = 14;
     peer_send_message(peer, message);
 
-    struct Message* recvMessage = peer_receive_message(peer);
+    Message* recvMessage = peer_receive_message(peer);
 
     for (int i = 0; i < recvMessage->size; i++) {
         printf("%c", ((uint8_t*)(recvMessage->data))[i]);

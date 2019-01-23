@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
 #include "messend.h"
 
@@ -69,6 +70,17 @@ MessendPeer messend_acceptor_accept(MessendAcceptor acceptor) {
 
     if (client) {
         peer = peer_create(client);
+    }
+
+    return peer;
+}
+
+MessendPeer messend_acceptor_accept_wait(MessendAcceptor acceptor) {
+    MessendPeer peer = NULL;
+
+    while (!peer) {
+        peer = messend_acceptor_accept(acceptor);
+        SDL_Delay(32);
     }
 
     return peer;

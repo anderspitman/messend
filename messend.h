@@ -22,6 +22,7 @@ void messend_shutdown();
 
 MessendAcceptor messend_acceptor_create(uint16_t port);
 MessendPeer messend_acceptor_accept(MessendAcceptor acceptor);
+MessendPeer messend_acceptor_accept_wait(MessendAcceptor acceptor);
 void messend_acceptor_free(MessendAcceptor acceptor);
 
 MessendPeer messend_initiate(char* addr, int port);

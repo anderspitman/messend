@@ -12,15 +12,8 @@ int main(int argc, char **argv) {
 
     MessendAcceptor acceptor = messend_acceptor_create(9001);
 
-    MessendPeer peer = 0;
-    
     printf("Waiting for connection\n");
-
-    while(!peer) {
-        peer = messend_acceptor_accept(acceptor);
-        SDL_Delay(100);
-    }
-
+    MessendPeer peer = messend_acceptor_accept_wait(acceptor);
     printf("Connection established\n");
 
     while (1) {

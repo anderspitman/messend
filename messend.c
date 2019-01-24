@@ -9,6 +9,7 @@ struct _Acceptor {
 };
 
 struct _Peer {
+    bool is_connected;
     SDLNet_SocketSet set;
     TCPsocket socket;
 };
@@ -38,6 +39,9 @@ MessendPeer peer_create(TCPsocket socket) {
     SDLNet_TCP_AddSocket(peer->set, socket);
 
     peer->socket = socket;
+
+    peer->is_connected = true;
+
     return peer;
 }
 
@@ -111,6 +115,10 @@ MessendPeer messend_initiate(char* addr, int port) {
 }
 
 
+bool messend_peer_is_connected(MessendPeer peer) {
+    return peer->is_connected;
+}
+
 bool messend_peer_has_message(MessendPeer peer) {
     SDLNet_CheckSockets(peer->set, 0);
     return SDLNet_SocketReady(peer->socket);
@@ -147,8 +155,9 @@ MessendMessage* messend_peer_receive_message_wait(MessendPeer peer) {
     Uint8 size_buf[sizeof(Uint32)];
 
     if (SDLNet_TCP_Recv(peer->socket, size_buf, sizeof(Uint32)) <= 0) {
-        // TODO: handle disconnect
-        error("could not read size");
+        // disconnected
+        peer->is_connected = false;
+        return NULL;
     }
 
     uint64_t size = _SDLNet_Read32(size_buf);
@@ -156,7 +165,10 @@ MessendMessage* messend_peer_receive_message_wait(MessendPeer peer) {
     Uint8* data_buf = (Uint8*)malloc(size);
 
     if (SDLNet_TCP_Recv(peer->socket, data_buf, size) <= 0) {
-        error("failed to receive packet");
+        // disconnected
+        free(data_buf);
+        peer->is_connected = false;
+        return NULL;
     }
 
     MessendMessage* pmessage = (MessendMessage*)malloc(sizeof(MessendMessage));

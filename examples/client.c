@@ -1,9 +1,8 @@
+#define _DEFAULT_SOURCE // needed for usleep apparently...
+#include <unistd.h>
 #include <stdio.h>
 #include <stdint.h>
 #include "messend.h"
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_net.h>
 
 
 int main(int argc, char **argv) {
@@ -35,14 +34,25 @@ int main(int argc, char **argv) {
 
         MessendMessage* recvMessage = messend_peer_receive_message_wait(peer);
 
-        for (int i = 0; i < recvMessage->size; i++) {
-            printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+        if (!recvMessage) {
+            printf("Possible disconnect\n");
+
+            if (!messend_peer_is_connected(peer)) {
+                printf("Disconnected\n");
+                break;
+            }
         }
-        printf("\n");
+        else {
 
-        messend_message_free(recvMessage);
+            for (int i = 0; i < recvMessage->size; i++) {
+                printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+            }
+            printf("\n");
 
-        SDL_Delay(2000);
+            messend_message_free(recvMessage);
+        }
+
+        usleep(1000*100);
     }
 
     messend_peer_free(peer);

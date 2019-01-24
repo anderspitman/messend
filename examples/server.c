@@ -2,9 +2,6 @@
 #include <stdint.h>
 #include "messend.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_net.h>
-
 
 int main(int argc, char **argv) {
 
@@ -20,15 +17,26 @@ int main(int argc, char **argv) {
 
         MessendMessage* recvMessage = messend_peer_receive_message_wait(peer);
 
-        printf("Message received:\n");
+        if (!recvMessage) {
+            printf("Possible disconnect\n");
 
-        for (int i = 0; i < recvMessage->size; i++) {
-            printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+            if (!messend_peer_is_connected(peer)) {
+                printf("Disconnected\n");
+                break;
+            }
         }
-        printf("\n");
+        else {
 
-        messend_peer_send_message(peer, *recvMessage);
-        messend_message_free(recvMessage);
+            printf("Message received:\n");
+
+            for (int i = 0; i < recvMessage->size; i++) {
+                printf("%c", ((uint8_t*)(recvMessage->data))[i]);
+            }
+            printf("\n");
+
+            messend_peer_send_message(peer, *recvMessage);
+            messend_message_free(recvMessage);
+        }
     }
 
     messend_peer_free(peer);

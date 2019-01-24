@@ -28,6 +28,7 @@ void messend_acceptor_free(MessendAcceptor acceptor);
 
 MessendPeer messend_initiate(char* addr, int port);
 
+bool messend_peer_is_connected(MessendPeer peer);
 void messend_peer_send_message(MessendPeer peer, MessendMessage message);
 bool messend_peer_has_message(MessendPeer peer);
 MessendMessage* messend_peer_receive_message(MessendPeer peer);

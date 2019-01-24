@@ -31,10 +31,10 @@ MessendPeer messend_initiate(char* addr, int port);
 void messend_peer_send_message(MessendPeer peer, MessendMessage message);
 bool messend_peer_has_message(MessendPeer peer);
 MessendMessage* messend_peer_receive_message(MessendPeer peer);
-MessendMessage messend_peer_receive_message_wait(MessendPeer peer);
+MessendMessage* messend_peer_receive_message_wait(MessendPeer peer);
 void messend_peer_free(MessendPeer peer);
 
-void messend_message_free(MessendMessage message);
+void messend_message_free(MessendMessage* message);
 
 #ifdef __cplusplus
 }

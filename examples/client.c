@@ -33,10 +33,10 @@ int main(int argc, char **argv) {
     while (1) {
         messend_peer_send_message(peer, message);
 
-        MessendMessage recvMessage = messend_peer_receive_message_wait(peer);
+        MessendMessage* recvMessage = messend_peer_receive_message_wait(peer);
 
-        for (int i = 0; i < recvMessage.size; i++) {
-            printf("%c", ((uint8_t*)(recvMessage.data))[i]);
+        for (int i = 0; i < recvMessage->size; i++) {
+            printf("%c", ((uint8_t*)(recvMessage->data))[i]);
         }
         printf("\n");
 

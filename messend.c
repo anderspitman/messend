@@ -134,15 +134,16 @@ MessendMessage* messend_peer_receive_message(MessendPeer peer) {
         return NULL;
     }
     else {
-        MessendMessage message = messend_peer_receive_message_wait(peer);
-        MessendMessage* pmessage = (MessendMessage*)malloc(sizeof(MessendMessage));
-        pmessage->data = message.data;
-        pmessage->size = message.size;
-        return pmessage;
+        MessendMessage* message = messend_peer_receive_message_wait(peer);
+        //MessendMessage* pmessage = (MessendMessage*)malloc(sizeof(MessendMessage));
+        //pmessage->data = message.data;
+        //pmessage->size = message.size;
+        //return pmessage;
+        return message;
     }
 }
 
-MessendMessage messend_peer_receive_message_wait(MessendPeer peer) {
+MessendMessage* messend_peer_receive_message_wait(MessendPeer peer) {
     Uint8 size_buf[sizeof(Uint32)];
 
     if (SDLNet_TCP_Recv(peer->socket, size_buf, sizeof(Uint32)) <= 0) {
@@ -158,11 +159,15 @@ MessendMessage messend_peer_receive_message_wait(MessendPeer peer) {
         error("failed to receive packet");
     }
 
-    MessendMessage message;
-    message.data = data_buf;
-    message.size = size;
+    MessendMessage* pmessage = (MessendMessage*)malloc(sizeof(MessendMessage));
+    pmessage->data = data_buf;
+    pmessage->size = size;
+    return pmessage;
 
-    return message;
+    //MessendMessage message;
+    //message.data = data_buf;
+    //message.size = size;
+    //return message;
 
 }
 
@@ -172,9 +177,10 @@ void messend_peer_free(MessendPeer peer) {
     free(peer);
 }
 
-void messend_message_free(MessendMessage message) {
-    if (message.data) {
-        free(message.data);
-        message.data = 0;
+void messend_message_free(MessendMessage* message) {
+    if (message->data) {
+        free(message->data);
+        message->data = 0;
     }
+    free(message);
 }

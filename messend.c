@@ -41,7 +41,7 @@ MessendPeer peer_create(TCPsocket socket) {
     return peer;
 }
 
-MessendAcceptor messend_acceptor_create(uint16_t port) {
+MessendAcceptor messend_acceptor_create(const char* host, uint16_t port) {
 
     IPaddress ip;
 
@@ -111,6 +111,11 @@ MessendPeer messend_initiate(char* addr, int port) {
 }
 
 
+bool messend_peer_has_message(MessendPeer peer) {
+    SDLNet_CheckSockets(peer->set, 0);
+    return SDLNet_SocketReady(peer->socket);
+}
+
 void messend_peer_send_message(MessendPeer peer, MessendMessage message) {
     Uint8 size_buf[sizeof(Uint32)];
     _SDLNet_Write32(message.size, size_buf);
@@ -129,11 +134,15 @@ MessendMessage* messend_peer_receive_message(MessendPeer peer) {
         return NULL;
     }
     else {
-        return messend_peer_receive_message_wait(peer);
+        MessendMessage message = messend_peer_receive_message_wait(peer);
+        MessendMessage* pmessage = (MessendMessage*)malloc(sizeof(MessendMessage));
+        pmessage->data = message.data;
+        pmessage->size = message.size;
+        return pmessage;
     }
 }
 
-MessendMessage* messend_peer_receive_message_wait(MessendPeer peer) {
+MessendMessage messend_peer_receive_message_wait(MessendPeer peer) {
     Uint8 size_buf[sizeof(Uint32)];
 
     if (SDLNet_TCP_Recv(peer->socket, size_buf, sizeof(Uint32)) <= 0) {
@@ -149,9 +158,9 @@ MessendMessage* messend_peer_receive_message_wait(MessendPeer peer) {
         error("failed to receive packet");
     }
 
-    MessendMessage* message = (MessendMessage*)malloc(sizeof(MessendMessage));
-    message->data = data_buf;
-    message->size = size;
+    MessendMessage message;
+    message.data = data_buf;
+    message.size = size;
 
     return message;
 
@@ -163,9 +172,9 @@ void messend_peer_free(MessendPeer peer) {
     free(peer);
 }
 
-void messend_message_free(MessendMessage* message) {
-    if (message->data) {
-        free(message->data);
-        message->data = 0;
+void messend_message_free(MessendMessage message) {
+    if (message.data) {
+        free(message.data);
+        message.data = 0;
     }
 }

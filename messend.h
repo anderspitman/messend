@@ -2,6 +2,7 @@
 #define __MESSEND_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <SDL2/SDL_net.h>
 
 #ifdef __cplusplus
@@ -20,7 +21,7 @@ typedef struct {
 void messend_startup();
 void messend_shutdown();
 
-MessendAcceptor messend_acceptor_create(uint16_t port);
+MessendAcceptor messend_acceptor_create(const char* host, uint16_t port);
 MessendPeer messend_acceptor_accept(MessendAcceptor acceptor);
 MessendPeer messend_acceptor_accept_wait(MessendAcceptor acceptor);
 void messend_acceptor_free(MessendAcceptor acceptor);
@@ -28,11 +29,12 @@ void messend_acceptor_free(MessendAcceptor acceptor);
 MessendPeer messend_initiate(char* addr, int port);
 
 void messend_peer_send_message(MessendPeer peer, MessendMessage message);
+bool messend_peer_has_message(MessendPeer peer);
 MessendMessage* messend_peer_receive_message(MessendPeer peer);
-MessendMessage* messend_peer_receive_message_wait(MessendPeer peer);
+MessendMessage messend_peer_receive_message_wait(MessendPeer peer);
 void messend_peer_free(MessendPeer peer);
 
-void messend_message_free(MessendMessage* message);
+void messend_message_free(MessendMessage message);
 
 #ifdef __cplusplus
 }
